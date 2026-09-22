@@ -84,3 +84,25 @@ taskForm.addEventListener("submit", function (event) {
     taskInput.focus();
   }
 });
+
+taskList.addEventListener("click", function (event) {
+
+  const taskItem = event.target.closest(".task-item");
+  if (!taskItem) return;
+
+  const taskId = Number(taskItem.dataset.id);
+
+  if (event.target.classList.contains("delete-btn")) {
+    deleteTask(taskId);
+    return;
+  }
+
+  if (
+    event.target.classList.contains("task-checkbox") ||
+    event.target.classList.contains("task-text")
+  ) {
+    toggleTask(taskId);
+  }
+});
+
+renderTasks();
