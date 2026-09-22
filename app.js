@@ -16,3 +16,17 @@ function addTask(text) {
   renderTasks();
 }
 
+function toggleTask(id) {
+  const task = tasks.find((t) => t.id === id);
+
+  if (task) {
+    task.completed = !task.completed;
+    renderTasks();
+  }
+}
+
+function deleteTask(id) {
+  tasks = tasks.filter((t) => t.id !== id);
+
+  renderTasks();
+}
