@@ -35,19 +35,23 @@ function loadTasks() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      return JSON.parse(saved);
+      const parsedTasks = JSON.parse(saved);
+      if (Array.isArray(parsedTasks)) {
+        return parsedTasks;
+      }
     }
-  } catch (e) {
-    console.error("Failed to load tasks:", e);
+  } catch (error) {
+    console.error("Failed to load tasks from localStorage:", error);
   }
   return defaultSampleTasks;
 }
 
 function saveTasks() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-  } catch (e) {
-    console.error("Failed to save tasks:", e);
+    const jsonString = JSON.stringify(tasks);
+    localStorage.setItem(STORAGE_KEY, jsonString);
+  } catch (error) {
+    console.error("Failed to save tasks to localStorage:", error);
   }
 }
 
@@ -81,9 +85,11 @@ function toggleTask(id) {
 
 function deleteTask(id) {
   tasks = tasks.filter((t) => t.id !== id);
+
   if (editingTaskId === id) {
     editingTaskId = null;
   }
+
   saveTasks();
   renderApp();
 }
@@ -165,7 +171,7 @@ function updateCountersAndStats() {
   }
 
   if (clearCompletedBtn) {
-    clearCompletedBtn.disabled = completed === 0;
+    clearCompletedBtn.disabled = !tasks.some((t) => t.completed);
   }
 }
 
